@@ -1,19 +1,22 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from "react";
+import { Routes } from "./Routes";
+import * as Font from "expo-font";
+import { AppLoading } from "expo";
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-    </View>
+const loadAssets = () => {
+  return Font.loadAsync({
+    "OpenSans-SemiBold": require("./assets/fonts/OpenSans-SemiBold.ttf"),
+    "Microsoft-YaHei-Bold": require("./assets/fonts/Microsoft-YaHei-Bold.ttf"),
+  });
+};
+
+const App = () => {
+  const [isLoaded, setisLoaded] = useState(false);
+  return isLoaded ? (
+    <Routes />
+  ) : (
+    <AppLoading startAsync={loadAssets} onFinish={() => setisLoaded(true)} />
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
