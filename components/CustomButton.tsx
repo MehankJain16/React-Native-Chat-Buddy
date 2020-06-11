@@ -2,8 +2,13 @@ import React from "react";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { LinearGradient } from "expo-linear-gradient";
 import { Text, View, StyleSheet, StyleProp, ViewStyle } from "react-native";
-import { PRIMARY_COLOR, PRIMARY_DARK_COLOR, WHITE_COLOR } from "../Constants";
+import {
+  PRIMARY_COLOR,
+  PRIMARY_DARK_COLOR,
+  WHITE_COLOR,
+} from "../helpers/Constants";
 import Animated from "react-native-reanimated";
+import { TapHandler } from "./TapHandler";
 
 interface CustomButtonProps {
   onPress: () => void;
@@ -34,7 +39,7 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
   textStyle,
 }) => {
   return (
-    <TouchableWithoutFeedback onPress={onPress}>
+    <TapHandler onPress={onPress}>
       {/* <Animated.View style={[style]}> */}
       <LinearGradient
         colors={[PRIMARY_COLOR, PRIMARY_DARK_COLOR]}
@@ -43,6 +48,6 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
         <Text style={[styles.buttonText, textStyle]}>{text}</Text>
       </LinearGradient>
       {/* </Animated.View> */}
-    </TouchableWithoutFeedback>
+    </TapHandler>
   );
 };

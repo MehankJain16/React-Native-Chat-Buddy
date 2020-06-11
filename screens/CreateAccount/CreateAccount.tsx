@@ -6,6 +6,7 @@ import Animated, {
   cond,
   eq,
   set,
+  SpringUtils,
 } from "react-native-reanimated";
 import {
   PRIMARY_COLOR,
@@ -15,12 +16,14 @@ import {
   GREY_COLOR,
   CREATE_ACCOUNT_HELPER_TEXT,
   CREATE_ACCOUNT_HEADING_TEXT,
-} from "../../Constants";
+} from "../../helpers/Constants";
 import { SafeAreaView, StatusBar, Text, View } from "react-native";
 import { withSpringTransition } from "react-native-redash";
-import { CustomButton } from "../CustomButton";
+import { CustomButton } from "../../components/CustomButton";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { AuthParamList } from "../AuthParmList";
+import { AuthParamList } from "../../helpers/AuthParmList";
+import { HeaderBackArrow } from "../../components/HeaderBackArrow";
+import { TapHandler } from "../../components/TapHandler";
 
 interface CreateAccountProps {
   navigation: StackNavigationProp<AuthParamList, "CreateAccount">;
@@ -28,7 +31,11 @@ interface CreateAccountProps {
 
 export const CreateAccount: React.FC<CreateAccountProps> = ({ navigation }) => {
   const val = useRef(new Animated.Value<0 | 1>(0));
-  const anim = withSpringTransition(val.current);
+  const anim = withSpringTransition(val.current, {
+    ...SpringUtils.makeDefaultConfig(),
+    overshootClamping: true,
+    damping: new Animated.Value(15),
+  });
 
   const transition = interpolate(anim, {
     inputRange: [0, 1],
@@ -38,12 +45,17 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({ navigation }) => {
   useCode(() => block([cond(eq(val.current, 0), set(val.current, 1))]), []);
 
   const onPress = () => {
-    navigation.goBack();
+    navigation.navigate("VerifyAccount", { mobileNumber: "9136890173" });
+  };
+
+  const handleBackArrowPress = () => {
+    navigation.navigate("GetStarted", { doAnim: true });
   };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: PRIMARY_COLOR }}>
       <StatusBar backgroundColor={PRIMARY_COLOR} barStyle="light-content" />
+      <HeaderBackArrow onPress={handleBackArrowPress} />
       <Animated.View
         style={{
           position: "absolute",

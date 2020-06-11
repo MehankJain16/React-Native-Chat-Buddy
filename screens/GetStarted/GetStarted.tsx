@@ -6,6 +6,7 @@ import Animated, {
   cond,
   eq,
   set,
+  SpringUtils,
 } from "react-native-reanimated";
 import {
   PRIMARY_COLOR,
@@ -14,20 +15,29 @@ import {
   APP_NAME,
   GREY_COLOR,
   GET_STARTED_HELPER_TEXT,
-} from "../../Constants";
+} from "../../helpers/Constants";
 import { SafeAreaView, StatusBar, Text } from "react-native";
 import { withSpringTransition } from "react-native-redash";
-import { CustomButton } from "../CustomButton";
+import { CustomButton } from "../../components/CustomButton";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { AuthParamList } from "../AuthParmList";
+import { AuthParamList } from "../../helpers/AuthParmList";
+import { RouteProp } from "@react-navigation/native";
 
 interface GetStartedProps {
   navigation: StackNavigationProp<AuthParamList, "GetStarted">;
+  route: RouteProp<AuthParamList, "GetStarted">;
 }
 
-export const GetStarted: React.FC<GetStartedProps> = ({ navigation }) => {
+export const GetStarted: React.FC<GetStartedProps> = ({
+  navigation,
+  route,
+}) => {
   const val = useRef(new Animated.Value<0 | 1>(0));
-  const anim = withSpringTransition(val.current);
+  const anim = withSpringTransition(val.current, {
+    ...SpringUtils.makeDefaultConfig(),
+    overshootClamping: true,
+    damping: new Animated.Value(15),
+  });
 
   const transition = interpolate(anim, {
     inputRange: [0, 1],
@@ -37,9 +47,12 @@ export const GetStarted: React.FC<GetStartedProps> = ({ navigation }) => {
   useCode(() => block([cond(eq(val.current, 0), set(val.current, 1))]), []);
 
   const onPress = () => {
-    // navigation.push("CreateAccount")
     navigation.navigate("CreateAccount");
   };
+
+  if (route.params?.doAnim) {
+    cond(eq(val.current, 0), set(val.current, 1));
+  }
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: PRIMARY_COLOR }}>
