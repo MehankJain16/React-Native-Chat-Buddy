@@ -62,8 +62,7 @@ export const GetStarted: React.FC<GetStartedProps> = ({
           flex: 1,
           alignItems: "center",
           justifyContent: "center",
-          scaleX: anim,
-          scaleY: anim,
+          transform: [{ scaleX: anim, scaleY: anim }],
         }}
       >
         <Text

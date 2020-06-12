@@ -19,7 +19,7 @@ interface CustomButtonProps {
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    borderRadius: 30,
+    borderRadius: 20,
     marginVertical: 12,
     marginHorizontal: 25,
   },
